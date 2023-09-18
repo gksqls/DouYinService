@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NicoSoft</title>
+    <link rel="stylesheet" type="text/css" href="../static/barrage/static/css/bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../static/barrage/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../static/barrage/dist/css/barrager.css">
+    <link rel="stylesheet" type="text/css" href="../static/barrage/static/pick-a-color/css/pick-a-color-1.2.3.min.css">
+    <link type="text/css" rel="stylesheet" href="../static/barrage/static/syntaxhighlighter/styles/shCoreDefault.css" />
+</head>
+
+<body id="ns_body" class="bb-js">
+    <div class="container">
+        <section class="bb-section">
+            <div class="text-center" style="height: 200px;">
+                
+            </div>
+        </section>
+    </div>
+
+    <script type="text/javascript" src="../static/barrage/static/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/js/tinycolor-0.9.15.min.js"></script>
+    <script type="text/javascript" src="../static/barrage/dist/js/jquery.barrager.min.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="../static/barrage/static/pick-a-color/js/pick-a-color-1.2.3.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            ws = new WebSocket("ws://127.0.0.1:9000/nscd");
+            ws.onopen = function () {
+                setInterval(function () {
+                    var message = {
+                        "type": "t10010",
+                        "service": new Date()
+                    };
+                    ws.send(JSON.stringify(message));
+                }, 10000)
+            }
+            ws.onmessage = function (e) {
+                var obj = JSON.parse(e.data)
+                if (obj.type == 2) {
+                    var item = {
+                        img: obj.head_img,
+                        info: obj.content.replace(/\r?\n|\r/g, ""),
+                        speed: 15,
+                        color: '#ffaa00',
+                    }
+                    $('body').barrager(item);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

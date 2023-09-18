@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NicoSoft</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .box {
+            width: 150px;
+            margin: 10px auto;
+        }
+
+        .box-bg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .box-bg img {
+            width: 70%;
+            height: 70%;
+        }
+
+        .box-text {
+            width: 70%;
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        .box-text-top {
+            width: 100% auto;
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        .box-text h5 {
+            text-align: center;
+            color: #fdfdfc;
+            text-shadow: #0477fa 1px 0 0, #0477fa 0 1px 0, #0477fa -1px 0 0, #0477fa 0 -1px 0;
+        }
+
+        .box-text-top h6 {
+            text-align: left;
+            color: #fdfdfc;
+            text-shadow: #0477fa 1px 0 0, #0477fa 0 1px 0, #0477fa -1px 0 0, #0477fa 0 -1px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="box-bg">
+            <div class="box-text-top">
+                <h6 id="ns_name"></h6>
+            </div>
+            <img src="../static/img/wooden.png" alt="" />
+            <audio id="ns_audio" src="../static/audio/wooden.mp3"></audio>
+            <div class="box-text">
+                <h5 id="ns_count">功德:&nbsp;0</h5>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<script>
+
+    var showName = function (name) {
+        $("#ns_name").html(name + " + 1");
+        $("#ns_name").slideUp(300).fadeIn(400);
+        var ns_audio = document.getElementById("ns_audio");
+        ns_audio.volume = 0.1;
+        ns_audio.play();
+        setTimeout(function () {
+            //
+        }, 1000);
+    }
+
+    $(document).ready(function () {
+        var count = 0;
+        ws = new WebSocket("ws://127.0.0.1:9000/nscd");
+        ws.onopen = function () {
+            setInterval(function () {
+                var message = {
+                    "type": "t10010",
+                    "service": new Date()
+                };
+                ws.send(JSON.stringify(message));
+            }, 10000)
+        }
+        ws.onmessage = function (e) {
+            var obj = JSON.parse(e.data)
+            if (obj.type == 3) {
+                count = count + 1;
+                showName(obj.nick_name)
+                $("#ns_count").html("功德: " + count);
+            }
+        }
+    });
+</script>
+
+</html>
