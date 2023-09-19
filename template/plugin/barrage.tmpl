@@ -16,7 +16,7 @@
     <div class="container">
         <section class="bb-section">
             <div class="text-center" style="height: 200px;">
-                
+
             </div>
         </section>
     </div>
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="../static/barrage/static/syntaxhighlighter/scripts/shBrushPhp.js"></script>
     <script type="text/javascript" src="../static/barrage/static/pick-a-color/js/pick-a-color-1.2.3.min.js"></script>
     <script>
-        $(document).ready(function () {
+        function connect() {
             ws = new WebSocket("ws://127.0.0.1:9000/nscd");
             ws.onopen = function () {
                 setInterval(function () {
@@ -41,6 +41,11 @@
                     ws.send(JSON.stringify(message));
                 }, 10000)
             }
+            ws.onclose = function (e) {
+                setTimeout(function () {
+                    connect();
+                }, 1000);
+            };
             ws.onmessage = function (e) {
                 var obj = JSON.parse(e.data)
                 if (obj.type == 2) {
@@ -53,6 +58,10 @@
                     $('body').barrager(item);
                 }
             }
+        }
+
+        $(document).ready(function () {
+            connect();
         });
     </script>
 </body>

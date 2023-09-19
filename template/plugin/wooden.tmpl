@@ -72,7 +72,6 @@
 </body>
 
 <script>
-
     var showName = function (name) {
         $("#ns_name").html(name + " + 1");
         $("#ns_name").slideUp(300).fadeIn(400);
@@ -80,11 +79,11 @@
         ns_audio.volume = 0.1;
         ns_audio.play();
         setTimeout(function () {
-            //
+            $("#ns_name").slideUp(300);
         }, 1000);
     }
 
-    $(document).ready(function () {
+    function connect() {
         var count = 0;
         ws = new WebSocket("ws://127.0.0.1:9000/nscd");
         ws.onopen = function () {
@@ -96,6 +95,11 @@
                 ws.send(JSON.stringify(message));
             }, 10000)
         }
+        ws.onclose = function (e) {
+            setTimeout(function () {
+                connect();
+            }, 1000);
+        };
         ws.onmessage = function (e) {
             var obj = JSON.parse(e.data)
             if (obj.type == 3) {
@@ -104,6 +108,10 @@
                 $("#ns_count").html("功德: " + count);
             }
         }
+    }
+
+    $(document).ready(function () {
+        connect();
     });
 </script>
 
