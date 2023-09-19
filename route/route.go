@@ -27,6 +27,7 @@ func initial_douyin(url string) {
 
 func initial_route() {
 	// 主页
+	r.GET("/", controller.Index)
 	r.GET("/index", controller.Index)
 	// websocket endPoint
 	r.GET("/nscd", socket.EndPoint)

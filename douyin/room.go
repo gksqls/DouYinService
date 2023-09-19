@@ -93,6 +93,10 @@ func (r *Room) Connect() error {
 	return nil
 }
 
+func (r *Room) Close() error {
+	return r.wsConnect.Close()
+}
+
 func (r *Room) read() {
 	for {
 		_, data, err := r.wsConnect.ReadMessage()
