@@ -97,6 +97,8 @@
         }
         ws.onclose = function (e) {
             setTimeout(function () {
+                $("#ns_name").slideUp(300);
+                $("#ns_count").html("功德: 0");
                 connect();
             }, 1000);
         };
