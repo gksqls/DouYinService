@@ -29,11 +29,13 @@ type WsMessage struct {
 	Count uint64 `json:"count"`
 }
 
+// WebSocket EndPoint
 func EndPoint(c *gin.Context) {
 	conn, _ := upgrader.Upgrade(c.Writer, c.Request, nil)
 	clients[conn] = true
 }
 
+// 消息推送
 func (m *WsMessage) Pust() {
 	for client := range clients {
 		err := client.WriteJSON(m)
