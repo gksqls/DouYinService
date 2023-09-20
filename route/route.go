@@ -30,6 +30,7 @@ var (
 	conf Config
 )
 
+// 初始化配置
 func initial_config() {
 	yamlFile, err := os.ReadFile("config.yaml")
 	if err != nil {
@@ -41,6 +42,7 @@ func initial_config() {
 	}
 }
 
+// 初始化抖音协议
 func initial_douyin(url string) {
 	room, err := douyin.NewRoom(url)
 	if err != nil {
@@ -49,6 +51,7 @@ func initial_douyin(url string) {
 	room.Connect()
 }
 
+// 初始化路由
 func initial_route() {
 	// 设置模版路径
 	r.LoadHTMLGlob("template/**/*")
@@ -70,14 +73,11 @@ func initial_route() {
 	r.GET("/plugin/barrage", controller.Barrage)
 }
 
-func (s *Server) Initial() {
+// 启动GIN服务器
+func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
 	initial_config()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()
-}
-
-func (s *Server) Start() {
-	s.Initial()
 	r.Run(":" + strconv.Itoa(conf.Server.Port))
 }
