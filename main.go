@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	server := new(route.Server)
-	server.Start()
+	new(route.Server).Start()
 }
