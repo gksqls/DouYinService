@@ -71,6 +71,7 @@ func initial_route() {
 	// 插件
 	r.GET("/plugin/wooden", controller.Wooden)
 	r.GET("/plugin/barrage", controller.Barrage)
+	r.GET("/plugin/countdown", controller.Countdown)
 }
 
 // 启动GIN服务器

@@ -1,4 +1,4 @@
 server:
-  port: 9000
+  port: 9001
 douyin:
   room: https://live.douyin.com/26242350553
