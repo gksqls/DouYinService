@@ -19,7 +19,7 @@ type WsMessage struct {
 	Type int `json:"type"`
 	// 礼物消息
 	GiftName  string `json:"gift_name"`
-	GiftCount uint64 `json:"gift_count"`
+	GiftCount int    `json:"gift_count"`
 	GiftId    uint64 `json:"gift_id"`
 	// 弹幕消息
 	NickName   string `json:"nick_name"`

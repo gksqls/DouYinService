@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	dyproto "DouYinService/protobuf"
@@ -15,6 +17,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
+	"golang.org/x/exp/maps"
 )
 
 type Room struct {
@@ -24,6 +27,26 @@ type Room struct {
 	RoomId    string
 	RoomTitle string
 	wsConnect *websocket.Conn
+}
+
+var (
+	giftCountCache = make(map[string]map[int]time.Time)
+	lock           sync.Mutex
+)
+
+func gift_count_timer_elapsed() {
+	now := time.Now()
+	for {
+		for k1 := range giftCountCache {
+			val := maps.Values(giftCountCache[k1])[0]
+			if now.Add(10 * time.Second).After(val) {
+				lock.Lock()
+				delete(giftCountCache, k1)
+				lock.Unlock()
+			}
+		}
+		time.Sleep(10 * time.Second)
+	}
 }
 
 func NewRoom(u string) (*Room, error) {
@@ -88,6 +111,7 @@ func (r *Room) Connect() error {
 	r.wsConnect = wsConn
 	go r.read()
 	go r.send()
+	go gift_count_timer_elapsed()
 	return nil
 }
 
@@ -183,19 +207,59 @@ func parseChatMsg(msg []byte) {
 func parseGiftMsg(msg []byte) {
 	var giftMsg dyproto.GiftMessage
 	_ = proto.Unmarshal(msg, &giftMsg)
+
+	key := strconv.FormatUint(giftMsg.GiftId, 10) + "-" + strconv.FormatUint(giftMsg.GroupId, 10)
+
 	if giftMsg.RepeatEnd == 1 {
+		if _, exists := giftCountCache[key]; exists && giftMsg.GroupId > 0 {
+			lock.Lock()
+			delete(giftCountCache, key)
+			lock.Unlock()
+		}
 		return
 	}
+
+	lastCount := 0
+	currCount := int(giftMsg.RepeatCount)
+	backward := currCount <= lastCount
+
+	if currCount <= 0 {
+		currCount = 1
+	}
+
+	if _, exists := giftCountCache[key]; exists {
+		keys := maps.Keys(giftCountCache[key])[0]
+		lastCount = keys
+		backward = currCount <= lastCount
+		if !backward {
+			lock.Lock()
+			giftCountCache[key] = map[int]time.Time{currCount: time.Now()}
+			lock.Unlock()
+		}
+	} else {
+		if giftMsg.GroupId > 0 && !backward {
+			lock.Lock()
+			giftCountCache[key] = map[int]time.Time{currCount: time.Now()}
+			lock.Unlock()
+		}
+	}
+
+	if backward {
+		return
+	}
+
+	count := currCount - lastCount
+
 	log.Printf(
 		"[INFO] %s : %s * %d 礼物ID -> %d\n",
 		giftMsg.User.NickName,
 		giftMsg.Gift.Name,
-		giftMsg.ComboCount,
+		count,
 		giftMsg.GiftId)
 	message := &socket.WsMessage{
 		Type:      1,
 		GiftName:  giftMsg.Gift.Name,
-		GiftCount: giftMsg.ComboCount,
+		GiftCount: count,
 		GiftId:    giftMsg.GiftId,
 	}
 	message.Pust()
