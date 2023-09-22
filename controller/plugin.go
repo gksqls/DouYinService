@@ -2,6 +2,8 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +20,10 @@ func Barrage(c *gin.Context) {
 
 // 倒计时插件
 func Countdown(c *gin.Context) {
-	cd := c.DefaultQuery("t", "2:00")
-	c.HTML(http.StatusOK, "countdown.tmpl", gin.H{"cd": cd})
+	t, err := strconv.ParseInt(c.DefaultQuery("t", "120"), 10, 64)
+	if err != nil {
+		c.HTML(http.StatusOK, "countdown.tmpl", gin.H{"cd": "02:00"})
+	} else {
+		c.HTML(http.StatusOK, "countdown.tmpl", gin.H{"cd": time.Unix(t, 0).Format("04:05")})
+	}
 }
