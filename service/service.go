@@ -44,17 +44,11 @@ func initial_mysql() {
 	if err != nil {
 		panic(err)
 	}
-
 	engine.ShowSQL(true)
 	engine.Logger().SetLevel(log.LOG_INFO)
 	engine.SetTableMapper(names.SameMapper{})
 	engine.SetColumnMapper(names.SnakeMapper{})
-
 	err = engine.Ping()
-	if err != nil {
-		panic(err)
-	}
-	_, err = engine.Exec("SELECT VERSION()")
 	if err != nil {
 		panic(err)
 	}
