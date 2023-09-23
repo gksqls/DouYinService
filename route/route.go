@@ -3,7 +3,9 @@ package route
 import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
+	"DouYinService/service"
 	"DouYinService/socket"
+	"context"
 	"os"
 	"strconv"
 
@@ -16,7 +18,7 @@ type Server struct {
 	DouYinUrl string
 }
 
-type Config struct {
+type config struct {
 	Server struct {
 		Port int `yaml:"port"`
 	} `yaml:"server"`
@@ -27,7 +29,8 @@ type Config struct {
 
 var (
 	r    = gin.Default()
-	conf Config
+	conf config
+	ctx  = context.Background()
 )
 
 // 初始化配置
@@ -49,6 +52,11 @@ func initial_douyin(url string) {
 		panic(err)
 	}
 	room.Connect()
+}
+
+// 初始化服务层
+func initial_service() {
+	service.Initial(ctx)
 }
 
 // 初始化路由
@@ -78,6 +86,7 @@ func initial_route() {
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
 	initial_config()
+	initial_service()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()
 	r.Run(":" + strconv.Itoa(conf.Server.Port))
