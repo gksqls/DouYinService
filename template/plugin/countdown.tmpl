@@ -123,7 +123,7 @@
 </head>
 
 <body translate="no">
-    <div class="timer" style="opacity: 1;">
+    <div class="timer" style="opacity: 1;" id="ns_div">
         <div class="timer--clock">
             <div class="minutes-group clock-display-grp">
                 <div class="first number-grp">
@@ -270,17 +270,28 @@
             </div>
         </div>
     </div>
-  
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script id="rendered-js">
+        
         TweenLite.defaultEase = Expo.easeOut;
-
-        initTimer({{ .cd }});
-
+    
         var timerEl = document.querySelector('.timer');
+        var tid1 = 0;
+        var tid2 = 0;
+
+        initTimer("00:01");
 
         function initTimer(t) {
 
+            if (tid1 != 0) {
+                clearTimeout(tid1);
+            }
+            if (tid2 != 0) {
+                clearTimeout(tid2);
+            }
             var self = this,
                 timerEl = document.querySelector('.timer'),
                 minutesGroupEl = timerEl.querySelector('.minutes-group'),
@@ -327,7 +338,7 @@
                     countdownFinished();
 
                 if (timestr != '0000')
-                    setTimeout(updateTimer, 1000);
+                    tid1 = setTimeout(updateTimer, 1000);
             }
 
             function updateTimerDisplay(arr) {
@@ -343,7 +354,7 @@
                     y: -group.querySelector('.num-' + arrayValue).offsetTop
                 });
             }
-            setTimeout(updateTimer, 1000);
+            tid2 = setTimeout(updateTimer, 1000);
         }
 
         function countdownFinished() {
@@ -352,6 +363,48 @@
             }, 1000);
         }
         //# sourceURL=pen.js
+
+        function secondsToTime(seconds) {
+            var hours = Math.floor(seconds / 3600);
+            var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+            var seconds = seconds - (hours * 3600) - (minutes * 60);
+
+            // round seconds
+            seconds = Math.round(seconds * 100) / 100
+
+            var result = (minutes < 10 ? "0" + minutes : minutes);
+            result += ":" + (seconds < 10 ? "0" + seconds : seconds);
+            return result;
+        }
+
+
+        function connect() {
+            ws = new WebSocket("ws://127.0.0.1:9000/nscd");
+            ws.onopen = function () {
+                setInterval(function () {
+                    var message = {
+                        "type": "t10010",
+                        "service": new Date()
+                    };
+                    ws.send(JSON.stringify(message));
+                }, 10000)
+            }
+            ws.onclose = function (e) {
+                setTimeout(function () {
+                    connect();
+                }, 1000);
+            };
+            ws.onmessage = function (e) {
+                var obj = JSON.parse(e.data)
+                if (obj.type == 101) {
+                    initTimer(secondsToTime(obj.countdown));
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            connect();
+        });
     </script>
 
 </body>

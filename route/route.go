@@ -3,7 +3,6 @@ package route
 import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
-	"DouYinService/service"
 	"DouYinService/socket"
 	"context"
 	"os"
@@ -54,11 +53,6 @@ func initial_douyin(url string) {
 	room.Connect()
 }
 
-// 初始化服务层
-func initial_service() {
-	service.Initial(ctx)
-}
-
 // 初始化路由
 func initial_route() {
 	// 设置模版路径
@@ -80,13 +74,16 @@ func initial_route() {
 	r.GET("/plugin/wooden", controller.Wooden)
 	r.GET("/plugin/barrage", controller.Barrage)
 	r.GET("/plugin/countdown", controller.Countdown)
+	// 插件管理
+	r.GET("/manage/countdown", controller.CountdownManage)
+	r.POST("/manage/countdown", controller.CountdownManageApi)
 }
 
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
+	// service.Initial(ctx)
 	initial_config()
-	initial_service()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()
 	r.Run(":" + strconv.Itoa(conf.Server.Port))

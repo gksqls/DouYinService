@@ -6,4 +6,5 @@ const (
 	GC_BALLOON     = 3773 // 热气球
 	GC_LOLLIPOP    = 165  // 棒棒糖
 	GC_DOUYIN      = 164  // 小抖音
+	GC_BEER        = 2002 // 大啤酒
 )
