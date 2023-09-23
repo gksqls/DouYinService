@@ -23,9 +23,9 @@ type config struct {
 }
 
 var (
-	conf   config
-	Redis  *db.Cache
-	Sqlite *xorm.Engine
+	conf  config
+	Redis *db.Cache
+	MySQL *xorm.Engine
 )
 
 func initial_mysql() {
@@ -58,7 +58,7 @@ func initial_mysql() {
 	if err != nil {
 		panic(err)
 	}
-	Sqlite = engine
+	MySQL = engine
 }
 
 func Initial(cxt context.Context) {
