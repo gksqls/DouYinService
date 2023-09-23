@@ -1,7 +1,7 @@
 package service
 
 import (
-	"DouYinService/db"
+	rdb "DouYinService/cache"
 	"context"
 	"fmt"
 	"os"
@@ -24,7 +24,7 @@ type config struct {
 
 var (
 	conf  config
-	Redis *db.Cache
+	Redis *rdb.Cache
 	MySQL *xorm.Engine
 )
 
@@ -56,7 +56,7 @@ func initial_mysql() {
 }
 
 func Initial(cxt context.Context) {
-	Redis = &db.Cache{Context: cxt}
+	Redis = &rdb.Cache{Context: cxt}
 	Redis.Initial()
 	initial_mysql()
 }
