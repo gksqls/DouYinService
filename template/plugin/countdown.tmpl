@@ -289,9 +289,11 @@
             if (tid1 != 0) {
                 clearTimeout(tid1);
             }
+
             if (tid2 != 0) {
                 clearTimeout(tid2);
             }
+
             var self = this,
                 timerEl = document.querySelector('.timer'),
                 minutesGroupEl = timerEl.querySelector('.minutes-group'),
@@ -376,7 +378,6 @@
             result += ":" + (seconds < 10 ? "0" + seconds : seconds);
             return result;
         }
-
 
         function connect() {
             ws = new WebSocket("ws://127.0.0.1:9000/nscd");
