@@ -250,17 +250,12 @@ func parseGiftMsg(msg []byte) {
 
 	count := currCount - lastCount
 
-	log.Printf(
-		"[INFO] %s : %s * %d 礼物ID -> %d\n",
-		giftMsg.User.NickName,
-		giftMsg.Gift.Name,
-		count,
-		giftMsg.GiftId)
 	message := &socket.WsMessage{
 		Type:      1,
 		GiftName:  giftMsg.Gift.Name,
 		GiftCount: count,
 		GiftId:    giftMsg.GiftId,
+		NickName:  giftMsg.User.NickName,
 	}
 	message.Pust()
 }

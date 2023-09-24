@@ -18,3 +18,13 @@ func CountdownManageApi(c *gin.Context) {
 	countdown.Start()
 	c.JSON(http.StatusOK, success())
 }
+
+// 礼物列表管理页面
+func GiftListManage(c *gin.Context) {
+	c.HTML(http.StatusOK, "gift_manage.tmpl", nil)
+}
+
+// 礼物列表管理API
+func GiftListManageApi(c *gin.Context) {
+	c.JSON(http.StatusOK, success())
+}

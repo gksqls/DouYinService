@@ -64,19 +64,33 @@ func initial_route() {
 	r.GET("/index", controller.Index)
 	// websocket endPoint
 	r.GET("/nscd", socket.EndPoint)
-	// 跳舞礼物模版
-	r.GET("/gift/left", controller.GiftDanceLeft)
-	r.GET("/gift/foot", controller.GiftDanceFoot)
-	// 游戏礼物模版
-	r.GET("/gift/game/left", controller.GiftGameLeft)
-	r.GET("/gift/game/foot", controller.GiftGameFoot)
+	// 礼物模版
+	gift := r.Group("/gift")
+	{
+		// 跳舞礼物模版
+		gift.GET("/left", controller.GiftDanceLeft)
+		gift.GET("/foot", controller.GiftDanceFoot)
+		// 游戏礼物模版
+		gift.GET("/game/left", controller.GiftGameLeft)
+		gift.GET("/game/foot", controller.GiftGameFoot)
+	}
 	// 插件
-	r.GET("/plugin/wooden", controller.Wooden)
-	r.GET("/plugin/barrage", controller.Barrage)
-	r.GET("/plugin/countdown", controller.Countdown)
+	plugin := r.Group("/plugin")
+	{
+		plugin.GET("/wooden", controller.Wooden)
+		plugin.GET("/barrage", controller.Barrage)
+		plugin.GET("/countdown", controller.Countdown)
+	}
 	// 插件管理
-	r.GET("/manage/countdown", controller.CountdownManage)
-	r.POST("/manage/countdown", controller.CountdownManageApi)
+	manage := r.Group("/manage")
+	{
+		// 倒计时插件管理
+		manage.GET("/countdown", controller.CountdownManage)
+		manage.POST("/countdown", controller.CountdownManageApi)
+		// 送礼列表管理
+		manage.GET("/gift", controller.GiftListManage)
+		manage.POST("/gift", controller.GiftListManageApi)
+	}
 }
 
 // 启动GIN服务器
