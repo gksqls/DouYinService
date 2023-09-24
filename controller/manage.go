@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"DouYinService/controller/result"
 	"DouYinService/service"
 	"net/http"
 
@@ -16,7 +17,7 @@ func CountdownManage(c *gin.Context) {
 func CountdownManageApi(c *gin.Context) {
 	countdown := &service.Countdown{Context: c}
 	countdown.Start()
-	c.JSON(http.StatusOK, success())
+	c.JSON(http.StatusOK, result.Success())
 }
 
 // 礼物列表管理页面
@@ -26,5 +27,5 @@ func GiftListManage(c *gin.Context) {
 
 // 礼物列表管理API
 func GiftListManageApi(c *gin.Context) {
-	c.JSON(http.StatusOK, success())
+	c.JSON(http.StatusOK, result.Success())
 }

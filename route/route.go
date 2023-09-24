@@ -4,7 +4,6 @@ import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
 	"DouYinService/socket"
-	"context"
 	"os"
 	"strconv"
 
@@ -29,7 +28,6 @@ type config struct {
 var (
 	r    = gin.Default()
 	conf config
-	ctx  = context.Background()
 )
 
 // 初始化配置
@@ -96,7 +94,7 @@ func initial_route() {
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
-	// service.Initial(ctx)
+	// service.Initial(context.Background())
 	initial_config()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()
