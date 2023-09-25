@@ -3,7 +3,9 @@ package route
 import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
+	"DouYinService/service"
 	"DouYinService/socket"
+	"context"
 	"os"
 	"strconv"
 
@@ -78,6 +80,7 @@ func initial_route() {
 		plugin.GET("/wooden", controller.Wooden)
 		plugin.GET("/barrage", controller.Barrage)
 		plugin.GET("/countdown", controller.Countdown)
+		plugin.GET("/overtime", controller.Overtime)
 	}
 	// 插件管理
 	manage := r.Group("/manage")
@@ -94,7 +97,7 @@ func initial_route() {
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
-	// service.Initial(context.Background())
+	service.Initial(context.Background())
 	initial_config()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()

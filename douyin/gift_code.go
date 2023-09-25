@@ -17,4 +17,5 @@ const (
 	GC_SMALL_HEART      = 463  // 小心心
 	GC_LIGHT_UP         = 860  // 为你点亮
 	GC_ICE_BLUE_ROSE    = 5701 // 冰蓝玫瑰
+	GC_FINGER_HEART     = 781  // 比心
 )

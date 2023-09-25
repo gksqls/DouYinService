@@ -46,10 +46,10 @@ func (c *Cache) Initial() {
 	log.Printf("[INFO] Redis ping result -> %s", r)
 }
 
-func (c *Cache) Get(key, val string) string {
+func (c *Cache) Get(key string) string {
 	ret, err := rdb.Get(c.Context, "key").Result()
 	if err != nil {
-		panic(err)
+		return ""
 	}
 	return ret
 }

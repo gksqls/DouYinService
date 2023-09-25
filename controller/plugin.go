@@ -20,3 +20,8 @@ func Barrage(c *gin.Context) {
 func Countdown(c *gin.Context) {
 	c.HTML(http.StatusOK, "countdown.tmpl", nil)
 }
+
+// 加班插件
+func Overtime(c *gin.Context) {
+	c.HTML(http.StatusOK, "overtime.tmpl", nil)
+}
