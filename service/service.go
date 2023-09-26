@@ -58,5 +58,5 @@ func initial_mysql() {
 func Initial(cxt context.Context) {
 	Redis = &rdb.Cache{Context: cxt}
 	Redis.Initial()
-	// initial_mysql()
+	initial_mysql()
 }

@@ -88,19 +88,29 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Plugin</th>
                                 <th>Status</th>
+                                <th>Uri</th>
                                 <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {{range $pl := .PList}}
                             <tr>
-                                <td>1,001</td>
-                                <td>random</td>
-                                <td>data</td>
-                                <td>placeholder</td>
+                                <td>{{$pl.Name}}</td>
+                                <td>
+                                    {{if eq $pl.Enable true}}
+                                    Disable
+                                    {{else}}
+                                    Enable
+                                    {{end}}
+                                </td>
+                                <td>{{$pl.Uri}}</td>
+                                <td>
+                                    <a href="javascript:void(0);">Edit</a>
+                                </td>
                             </tr>
+                            {{end}}
                         </tbody>
                     </table>
                 </div>

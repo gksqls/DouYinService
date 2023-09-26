@@ -3,9 +3,7 @@ package route
 import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
-	"DouYinService/service"
 	"DouYinService/socket"
-	"context"
 	"os"
 	"strconv"
 
@@ -97,7 +95,7 @@ func initial_route() {
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
-	service.Initial(context.Background())
+	// service.Initial(context.Background())
 	initial_config()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()

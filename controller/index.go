@@ -10,6 +10,6 @@ import (
 func Index(c *gin.Context) {
 	index := &service.Index{Context: c}
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"list": index.LoadPluginList(),
+		"PList": index.LoadPluginList(),
 	})
 }
