@@ -29,3 +29,8 @@ func GiftListManage(c *gin.Context) {
 func GiftListManageApi(c *gin.Context) {
 	c.JSON(http.StatusOK, result.Success())
 }
+
+// 加班倒计时管理
+func OvertimeManage(c *gin.Context) {
+	c.HTML(http.StatusOK, "overtime_manage.tmpl", nil)
+}

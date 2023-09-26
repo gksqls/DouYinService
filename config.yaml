@@ -1,7 +1,7 @@
 server:
   port: 9000
 douyin:
-  room: https://live.douyin.com/26242350553
+  room: https://live.douyin.com/431011723187 #https://live.douyin.com/26242350553
 redis:
   address: 127.0.0.1:6379
   #password:

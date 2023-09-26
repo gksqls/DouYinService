@@ -1,5 +1,4 @@
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,7 +34,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">NicoSoft</a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
@@ -48,10 +46,8 @@
             </li>
         </ul>
     </nav>
-
     <div class="container-fluid">
         <div class="row">
-
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
@@ -81,13 +77,38 @@
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Countdown manage</h1>
                 </div>
-
                 <div class="row">
                     <div class="ccol col-lg-2">
-                        <label for="ns_time">Time (Second)</label>
-                        <input type="text" class="form-control" id="ns_time" value="120" />
-                        <br />
-                        <button class="btn btn-primary btn-block" onclick="SetCountdown();">Set Countdown</button>
+                        <label for="ns_time">Overtime (Second)</label>
+                        <input type="text" class="form-control" id="ns_time" value="10800" />
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <label for="sub_time">Subtract Time</label>
+                        <select class="custom-select d-block w-100" id="sub_time"></select>
+                    </div>
+                    <div class="col col-lg-1">
+                        <label for="ns_sub_time">Second</label>
+                        <input type="text" class="form-control" id="ns_sub_time" value="" />
+                    </div>
+                    <div class="col col-lg-2">
+                        <label for="add_time">Add Time</label>
+                        <select class="custom-select d-block w-100" id="add_time"></select>
+                    </div>
+                    <div class="col col-lg-1">
+                        <label for="ns_add_time">Second</label>
+                        <input type="text" class="form-control" id="ns_add_time" value="" />
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="ccol col-lg-2">
+                        <button class="btn btn-primary btn-block" onclick="SetCountdown();">Save</button>
+                    </div>
+                    <div class="ccol col-lg-2">
+                        <button class="btn btn-primary btn-block" onclick="SetCountdown();">Reset</button>
                     </div>
                 </div>
             </main>
@@ -104,7 +125,7 @@
             url: "/manage/countdown",
             data: JSON.stringify({ "t": nst }),
             success: function (data) {
-               
+
             },
             dataType: "json"
         });

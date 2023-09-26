@@ -89,6 +89,8 @@ func initial_route() {
 		// 送礼列表管理
 		manage.GET("/gift", controller.GiftListManage)
 		manage.POST("/gift", controller.GiftListManageApi)
+		// 加班倒计时管理
+		manage.GET("/overtime", controller.OvertimeManage)
 	}
 }
 
