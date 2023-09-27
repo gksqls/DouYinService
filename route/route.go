@@ -91,6 +91,7 @@ func initial_route() {
 		manage.POST("/gift", controller.GiftListManageApi)
 		// 加班倒计时管理
 		manage.GET("/overtime", controller.OvertimeManage)
+		manage.POST("/overtime", controller.OvertimeManageApi)
 	}
 }
 

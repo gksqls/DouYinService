@@ -15,7 +15,7 @@ var (
 )
 
 type WsMessage struct {
-	// 消息类型 1 礼物，2 弹幕，3 点赞，4 进入房间, 101 设置倒计时
+	// 消息类型 1 礼物，2 弹幕，3 点赞，4 进入房间, 101 设置倒计时, 102 加班倒计时设计
 	Type int `json:"type"`
 	// 礼物消息
 	GiftName  string `json:"gift_name"`

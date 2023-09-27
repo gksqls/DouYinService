@@ -34,3 +34,10 @@ func GiftListManageApi(c *gin.Context) {
 func OvertimeManage(c *gin.Context) {
 	c.HTML(http.StatusOK, "overtime_manage.tmpl", nil)
 }
+
+// 加班倒计时管理
+func OvertimeManageApi(c *gin.Context) {
+	overtime := &service.Overtime{Context: c}
+	overtime.Set()
+	c.JSON(http.StatusOK, result.Success())
+}
