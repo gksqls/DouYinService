@@ -2,6 +2,7 @@ package service
 
 import (
 	"DouYinService/socket"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -28,16 +29,29 @@ func (o *Overtime) Set() {
 	message.Pust()
 }
 
+func (o *Overtime) Find() *TOvertime {
+	overtime := new(TOvertime)
+	_, err := Db.Where("id=?", 1).Get(overtime)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(overtime)
+	return overtime
+}
+
 func (o *Overtime) Save() {
 	overtime := new(TOvertime)
 	o.Context.BindJSON(&overtime)
-	Db.ID(overtime.Id).Update(&overtime)
+	_, err := Db.Where("id=?", 1).Update(overtime)
+	if err != nil {
+		panic(err)
+	}
 	message := &socket.WsMessage{
 		Type:      1021,
 		GiftAddId: overtime.GiftAddId,
 		GiftSubId: overtime.GiftSubId,
 		TimeAdd:   overtime.TimeAdd,
-		TimeSub:   overtime.GiftSubId,
+		TimeSub:   overtime.TimeSub,
 	}
 	message.Pust()
 }

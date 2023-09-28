@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"DouYinService/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,5 +24,6 @@ func Countdown(c *gin.Context) {
 
 // 加班插件
 func Overtime(c *gin.Context) {
-	c.HTML(http.StatusOK, "overtime.tmpl", nil)
+	overtime := &service.Overtime{Context: c}
+	c.HTML(http.StatusOK, "overtime.tmpl", gin.H{"overtime": overtime.Find()})
 }

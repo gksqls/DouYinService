@@ -52,6 +52,7 @@ func (m *WsMessage) Pust() {
 		if err != nil {
 			client.Close()
 			delete(clients, client)
+			return
 		}
 	}
 }

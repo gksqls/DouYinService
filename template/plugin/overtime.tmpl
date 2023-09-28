@@ -77,6 +77,12 @@
 
     var countdown = 60 * 60 * 3;
 
+    var time_add = {{- .overtime.TimeAdd -}};
+    var time_sub = {{- .overtime.TimeSub -}};
+
+    var gift_add_id = {{- .overtime.GiftAddId -}};
+    var gift_sub_id = {{- .overtime.GiftSubId -}};
+
     function set_time() {
         context.clearRect(80, 10, 150, 60);
         context.textAlign = "center";
@@ -140,18 +146,22 @@
         ws.onmessage = function (e) {
             var obj = JSON.parse(e.data)
             if (obj.type == 1) {
-                if (obj.gift_id == 463) {
-                    countdown = countdown - (60 * obj.gift_count);
+                if (obj.gift_id == gift_sub_id) {
+                    countdown = countdown - (time_sub * obj.gift_count);
                     if (countdown < 0) {
                         countdown = 0;
                     }
                 }
-                if (obj.gift_id == 2002) {
-                    countdown = countdown + (60 * obj.gift_count);
+                if (obj.gift_id == gift_add_id) {
+                    countdown = countdown + (time_add * obj.gift_count);
                 }
             }
             if(obj.type == 102){
                 countdown = obj.countdown;
+            }
+            if(obj.type == 1021){
+                time_add = obj.time_add;
+                time_sub = obj.time_sub;
             }
         }
     }
