@@ -2,7 +2,6 @@ package service
 
 import (
 	"DouYinService/socket"
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +34,6 @@ func (o *Overtime) Find() *TOvertime {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(overtime)
 	return overtime
 }
 
