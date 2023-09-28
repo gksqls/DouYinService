@@ -15,7 +15,7 @@ var (
 )
 
 type WsMessage struct {
-	// 消息类型 1 礼物，2 弹幕，3 点赞，4 进入房间, 101 设置倒计时, 102 加班倒计时设计
+	// 消息类型 1 礼物，2 弹幕，3 点赞，4 进入房间, 101 设置倒计时, 102 加班倒计时设置，1021 加班倒计时配置
 	Type int `json:"type"`
 	// 礼物消息
 	GiftName  string `json:"gift_name"`
@@ -29,6 +29,14 @@ type WsMessage struct {
 	Count uint64 `json:"count"`
 	// 倒计时秒数
 	Countdown int `json:"countdown"`
+	// 添加时间礼物
+	GiftAddId int `json:"gift_add_id"`
+	// 减速时间礼物
+	GiftSubId int `json:"gift_sub_id"`
+	// 添加时间
+	TimeAdd int `json:"time_add"`
+	// 减速时间
+	TimeSub int `json:"time_sub"`
 }
 
 // WebSocket EndPoint

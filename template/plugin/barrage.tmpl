@@ -57,6 +57,14 @@
                     }
                     $('body').barrager(item);
                 }
+                if (obj.type == 4) {
+                    var item = {
+                        info: obj.content.replace(/\r?\n|\r/g, ""),
+                        speed: 15,
+                        color: '#ffaa00',
+                    }
+                    $('body').barrager(item);
+                }
             }
         }
 

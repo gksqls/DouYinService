@@ -41,3 +41,10 @@ func OvertimeManageApi(c *gin.Context) {
 	overtime.Set()
 	c.JSON(http.StatusOK, result.Success())
 }
+
+// 加班倒计时配置管理
+func OvertimeManageSaveApi(c *gin.Context) {
+	overtime := &service.Overtime{Context: c}
+	overtime.Save()
+	c.JSON(http.StatusOK, result.Success())
+}

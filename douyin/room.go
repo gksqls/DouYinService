@@ -3,6 +3,7 @@ package douyin
 import (
 	"bytes"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"time"
 
 	dyproto "DouYinService/protobuf"
+	"DouYinService/service"
 	"DouYinService/socket"
 
 	"github.com/golang/protobuf/proto"
@@ -32,7 +34,14 @@ type Room struct {
 var (
 	giftCountCache = make(map[string]map[int]time.Time)
 	lock           sync.Mutex
+	welcomes       []TWelcome
 )
+
+type TWelcome struct {
+	Id      int    `xorm:"not null pk autoincr INTEGER"`
+	User    string `xorm:"not null TEXT"`
+	Content string `xorm:"not null TEXT"`
+}
 
 func gift_count_timer_elapsed() {
 	now := time.Now()
@@ -112,6 +121,7 @@ func (r *Room) Connect() error {
 	go r.read()
 	go r.send()
 	go gift_count_timer_elapsed()
+	service.Db.Find(&welcomes)
 	return nil
 }
 
@@ -274,10 +284,15 @@ func parseLikeMsg(msg []byte) {
 func parseEnterMsg(msg []byte) {
 	var enterMsg dyproto.MemberMessage
 	_ = proto.Unmarshal(msg, &enterMsg)
-	message := &socket.WsMessage{
-		Type:       4,
-		NickName:   enterMsg.User.NickName,
-		HeadImgUrl: enterMsg.User.AvatarThumb.UrlListList[0],
+	for _, welcome := range welcomes {
+		if strings.ContainsAny(enterMsg.User.NickName, welcome.User) {
+			message := &socket.WsMessage{
+				Type:       4,
+				NickName:   enterMsg.User.NickName,
+				HeadImgUrl: enterMsg.User.AvatarThumb.UrlListList[0],
+				Content:    fmt.Sprintf(welcome.Content, enterMsg.User.NickName),
+			}
+			message.Pust()
+		}
 	}
-	message.Pust()
 }

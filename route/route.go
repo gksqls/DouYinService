@@ -3,7 +3,9 @@ package route
 import (
 	"DouYinService/controller"
 	"DouYinService/douyin"
+	"DouYinService/service"
 	"DouYinService/socket"
+	"context"
 	"os"
 	"strconv"
 
@@ -92,13 +94,14 @@ func initial_route() {
 		// 加班倒计时管理
 		manage.GET("/overtime", controller.OvertimeManage)
 		manage.POST("/overtime", controller.OvertimeManageApi)
+		manage.POST("/overtime/save", controller.OvertimeManageSaveApi)
 	}
 }
 
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
-	// service.Initial(context.Background())
+	service.Initial(context.Background())
 	initial_config()
 	initial_douyin(conf.Douyin.Room)
 	initial_route()
