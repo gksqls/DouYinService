@@ -19,6 +19,11 @@ type TOvertime struct {
 	TimeSub   int `json:"time_sub" xorm:"not null integer"`
 }
 
+type TGift struct {
+	Name string `json:"name" xorm:"not null text"`
+	Code int    `json:"code" xorm:"not null int"`
+}
+
 func (o *Overtime) Set() {
 	jsonMap := make(map[string]interface{})
 	o.Context.BindJSON(&jsonMap)
@@ -52,4 +57,13 @@ func (o *Overtime) Save() {
 		TimeSub:   overtime.TimeSub,
 	}
 	message.Pust()
+}
+
+func (o *Overtime) FindGiftList() *[]TGift {
+	var list []TGift
+	err := Db.Find(&list)
+	if err != nil {
+		panic(err)
+	}
+	return &list
 }

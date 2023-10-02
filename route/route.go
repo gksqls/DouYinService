@@ -6,11 +6,9 @@ import (
 	"DouYinService/service"
 	"DouYinService/socket"
 	"context"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/yaml.v2"
 )
 
 type Server struct {
@@ -18,27 +16,22 @@ type Server struct {
 	DouYinUrl string
 }
 
-type config struct {
-	Server struct {
-		Port int `yaml:"port"`
-	} `yaml:"server"`
-	Douyin struct {
-		Room string `yaml:"room"`
-	} `yaml:"douyin"`
+type TConfig struct {
+	Id         int    `xorm:"not null integer"`
+	ServerPort int    `xorm:"integer"`
+	DouyinRoom string `xorm:"text"`
 }
 
 var (
 	r    = gin.Default()
-	conf config
+	conf *TConfig
 )
 
 // 初始化配置
 func initial_config() {
-	yamlFile, err := os.ReadFile("config.yaml")
-	if err != nil {
-		panic(err)
-	}
-	err = yaml.Unmarshal(yamlFile, &conf)
+	service.Initial(context.Background())
+	conf = new(TConfig)
+	_, err := service.Db.Where("id=?", 1).Get(conf)
 	if err != nil {
 		panic(err)
 	}
@@ -95,15 +88,15 @@ func initial_route() {
 		manage.GET("/overtime", controller.OvertimeManage)
 		manage.POST("/overtime", controller.OvertimeManageApi)
 		manage.POST("/overtime/save", controller.OvertimeManageSaveApi)
+		manage.POST("/overtime/gift", controller.OvertimeGiftManageApi)
 	}
 }
 
 // 启动GIN服务器
 func (s *Server) Start() {
 	gin.SetMode(gin.ReleaseMode)
-	service.Initial(context.Background())
 	initial_config()
-	initial_douyin(conf.Douyin.Room)
+	initial_douyin(conf.DouyinRoom)
 	initial_route()
-	r.Run(":" + strconv.Itoa(conf.Server.Port))
+	r.Run(":" + strconv.Itoa(conf.ServerPort))
 }

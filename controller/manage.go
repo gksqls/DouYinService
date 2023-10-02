@@ -48,3 +48,9 @@ func OvertimeManageSaveApi(c *gin.Context) {
 	overtime.Save()
 	c.JSON(http.StatusOK, result.Success())
 }
+
+// 礼物列表
+func OvertimeGiftManageApi(c *gin.Context) {
+	overtime := &service.Overtime{Context: c}
+	c.JSON(http.StatusOK, overtime.FindGiftList())
+}

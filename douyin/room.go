@@ -285,7 +285,7 @@ func parseEnterMsg(msg []byte) {
 	var enterMsg dyproto.MemberMessage
 	_ = proto.Unmarshal(msg, &enterMsg)
 	for _, welcome := range welcomes {
-		if strings.ContainsAny(enterMsg.User.NickName, welcome.User) {
+		if strings.Contains(enterMsg.User.NickName, welcome.User) {
 			message := &socket.WsMessage{
 				Type:       4,
 				NickName:   enterMsg.User.NickName,
