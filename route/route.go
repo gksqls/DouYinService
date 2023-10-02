@@ -16,21 +16,15 @@ type Server struct {
 	DouYinUrl string
 }
 
-type TConfig struct {
-	Id         int    `xorm:"not null integer"`
-	ServerPort int    `xorm:"integer"`
-	DouyinRoom string `xorm:"text"`
-}
-
 var (
 	r    = gin.Default()
-	conf *TConfig
+	conf *service.TConfig
 )
 
 // 初始化配置
 func initial_config() {
 	service.Initial(context.Background())
-	conf = new(TConfig)
+	conf = new(service.TConfig)
 	_, err := service.Db.Where("id=?", 1).Get(conf)
 	if err != nil {
 		panic(err)
@@ -89,6 +83,9 @@ func initial_route() {
 		manage.POST("/overtime", controller.OvertimeManageApi)
 		manage.POST("/overtime/save", controller.OvertimeManageSaveApi)
 		manage.POST("/overtime/gift", controller.OvertimeGiftManageApi)
+		// 配置管理
+		manage.POST("/config", controller.ConfigManageApi)
+		manage.POST("/config/update", controller.ConfigManageUpdateApi)
 	}
 }
 

@@ -54,3 +54,16 @@ func OvertimeGiftManageApi(c *gin.Context) {
 	overtime := &service.Overtime{Context: c}
 	c.JSON(http.StatusOK, overtime.FindGiftList())
 }
+
+// 配置信息
+func ConfigManageApi(c *gin.Context) {
+	conf := &service.Config{Context: c}
+	c.JSON(http.StatusOK, conf.FindConfig())
+}
+
+// 配置信息
+func ConfigManageUpdateApi(c *gin.Context) {
+	conf := &service.Config{Context: c}
+	conf.UpdateConfig()
+	c.JSON(http.StatusOK, result.Success())
+}
