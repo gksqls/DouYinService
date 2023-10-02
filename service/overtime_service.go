@@ -24,6 +24,20 @@ type TGift struct {
 	Code int    `json:"code" xorm:"not null int"`
 }
 
+func (t *TGift) Save() {
+	gift := new(TGift)
+	has, err := Db.Where("code=?", t.Code).Get(gift)
+	if err != nil {
+		panic(err)
+	}
+	if !has {
+		_, err = Db.InsertOne(t)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 func (o *Overtime) Set() {
 	jsonMap := make(map[string]interface{})
 	o.Context.BindJSON(&jsonMap)

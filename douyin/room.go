@@ -267,7 +267,13 @@ func parseGiftMsg(msg []byte) {
 		GiftId:    giftMsg.GiftId,
 		NickName:  giftMsg.User.NickName,
 	}
+
 	message.Pust()
+
+	lock.Lock()
+	gift := &service.TGift{Code: int(giftMsg.GiftId), Name: giftMsg.Gift.Name}
+	gift.Save()
+	lock.Unlock()
 }
 
 func parseLikeMsg(msg []byte) {
