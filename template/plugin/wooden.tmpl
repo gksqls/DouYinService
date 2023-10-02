@@ -71,8 +71,8 @@
 </body>
 
 <script>
-    var showName = function (name) {
-        $("#ns_name").html(name + " + 1");
+    var showName = function (name, num) {
+        $("#ns_name").html(name + " + " + num);
         $("#ns_name").slideUp(300).fadeIn(400);
         var ns_audio = document.getElementById("ns_audio");
         ns_audio.volume = 0.1;
@@ -104,8 +104,8 @@
         ws.onmessage = function (e) {
             var obj = JSON.parse(e.data)
             if (obj.type == 3) {
-                count = count + 1;
-                showName(obj.nick_name)
+                count = count + obj.count;
+                showName(obj.nick_name, obj.count)
                 $("#ns_count").html("功德: " + count);
             }
         }
